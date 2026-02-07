@@ -23,7 +23,7 @@ def test_cors_preflight():
     print("   - Configured expose_headers for better browser compatibility")
 
     print("\n3. EXPANDED allowed origins in .env")
-    print("   - Added http://localhost:5173 (common Vite default)")
+    print("   - Added http://localhost:3000 (common Vite default)")
     print("   - Added wildcard '*' for development flexibility")
 
     print("\nThe original error was:")

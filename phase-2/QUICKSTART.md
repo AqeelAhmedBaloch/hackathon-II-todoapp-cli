@@ -169,7 +169,7 @@ pip install -r requirements.txt
 
 **CORS errors (Frontend):**
 - Check that `CORS_ORIGINS` in backend `.env` includes frontend URL
-- Default: `http://localhost:5173,http://localhost:3000`
+- Default: `http://localhost:3000,http://localhost:3001`
 
 **JWT errors:**
 - Make sure `JWT_SECRET_KEY` in backend `.env` is set (not the example value)

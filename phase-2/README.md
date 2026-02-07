@@ -113,7 +113,7 @@ docker-compose up -d
 ```
 
 3. **Access Application**
-- Frontend: http://localhost:5173
+- Frontend: http://localhost:3000
 - Backend API: http://localhost:8000/docs
 
 ### Prerequisites
@@ -446,7 +446,7 @@ JWT_ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_HOURS=24
 
 # CORS (comma-separated origins)
-CORS_ORIGINS=http://localhost:5173,http://localhost:3000
+CORS_ORIGINS=http://localhost:3000,http://localhost:3001
 
 # Application
 DEBUG=true
