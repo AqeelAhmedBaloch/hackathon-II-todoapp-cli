@@ -25,11 +25,14 @@ app = FastAPI(
 )
 
 # Configure CORS
+origins = settings.cors_origins_list
+logging.info(f"Configuring CORS with origins: {origins}")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.cors_origins_list,
-    allow_credentials=True,
-    allow_methods=["*"],
+    allow_origins=origins,
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allow_headers=["*"],
 )
 
@@ -53,6 +56,18 @@ def root():
 def health_check():
     """Health check endpoint."""
     return {"status": "healthy"}
+
+
+@app.get("/test-db-connection")
+def test_db_connection(db: Session = Depends(get_db)):
+    """Diagnostic endpoint to test database connectivity."""
+    try:
+        from sqlalchemy import text
+        db.execute(text("SELECT 1"))
+        return {"status": "success", "message": "Database connection is working"}
+    except Exception as e:
+        logging.error(f"Database connection test failed: {e}")
+        return {"status": "error", "message": str(e)}
 
 
 if __name__ == "__main__":

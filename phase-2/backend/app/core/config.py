@@ -30,7 +30,7 @@ class Settings(BaseSettings):
     # CORS
     CORS_ORIGINS: str = Field(
         default="*",
-        description="Comma-separated list of allowed origins"
+        description="Comma-separated list of allowed origins. Use '*' for all."
     )
 
     # Application
