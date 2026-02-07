@@ -1,0 +1,30 @@
+# ============================================================================
+# Phase-2 Backend Dependencies (Windows Compatible)
+# ============================================================================
+
+# Core Framework
+fastapi==0.115.6
+uvicorn[standard]==0.24.0
+gunicorn==23.0.0
+
+# Database
+sqlalchemy==2.0.45
+aiosqlite==0.19.0
+alembic==1.12.1
+psycopg2-binary==2.9.11
+
+# Authentication & Security
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.6
+
+# Validation (compatible versions)
+pydantic==2.12.5
+email-validator>=2.0.0
+
+# Environment Variables
+python-dotenv==1.0.0
+pydantic-settings==2.7.0
+
+# CORS
+fastapi-cors==0.0.6

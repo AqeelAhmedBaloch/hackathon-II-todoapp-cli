@@ -1,0 +1,13 @@
+{
+  "name": "todoappcli",
+  "version": "1.0.0",
+  "description": "Phase-1 Todo Console Application with in-memory CRUD operations.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}

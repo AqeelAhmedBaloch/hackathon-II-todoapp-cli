@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: todoapp-db-prod
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-todoapp}
+    volumes:
+      - postgres_data_prod:/var/lib/postgresql/data
+    networks:
+      - todoapp-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # Only expose port if needed for external access
+    # ports:
+    #   - "5432:5432"
+
+  # FastAPI Backend (Production)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: production  # Uses the production stage
+    container_name: todoapp-backend-prod
+    restart: always
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-todoapp}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      JWT_ALGORITHM: ${JWT_ALGORITHM:-HS256}
+      ACCESS_TOKEN_EXPIRE_HOURS: ${ACCESS_TOKEN_EXPIRE_HOURS:-24}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost}
+      DEBUG: "false"
+      ENVIRONMENT: production
+    networks:
+      - todoapp-network
+    depends_on:
+      db:
+        condition: service_healthy
+    # Only expose port if not using reverse proxy
+    ports:
+      - "8000:8000"
+    # For production, don't mount volumes (use image code)
+    # volumes:
+    #   - ./backend:/app
+
+  # React Frontend (Production with Nginx)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: production  # Uses the nginx production stage
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:8000}
+    container_name: todoapp-frontend-prod
+    restart: always
+    networks:
+      - todoapp-network
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+    # For production, don't mount volumes
+    # volumes:
+    #   - ./frontend:/app
+
+networks:
+  todoapp-network:
+    driver: bridge
+
+volumes:
+  postgres_data_prod:
+    driver: local
