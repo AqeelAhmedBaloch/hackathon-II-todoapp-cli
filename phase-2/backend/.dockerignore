@@ -51,14 +51,10 @@ Thumbs.db
 .gitignore
 .gitattributes
 
-# Documentation
-README.md
+# Documentation (keep README.md for Hugging Face)
 CHANGELOG.md
-*.md
 
-# Docker
-Dockerfile
-.dockerignore
+# Docker (keep Dockerfile for Hugging Face)
 docker-compose*.yml
 
 # Temporary files

@@ -1,5 +1,5 @@
 # ============================================================================
-# Backend Dockerfile - Production Ready Multi-Stage Build
+# Backend Dockerfile - Hugging Face Spaces Optimized
 # ============================================================================
 
 # Stage 1: Builder - Install dependencies
@@ -42,26 +42,24 @@ COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH" \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONPATH=/app
-
-# Create non-root user for security
-RUN groupadd -r appuser && useradd -r -g appuser appuser
+    PYTHONPATH=/app \
+    PORT=7860
 
 # Copy application code
-COPY --chown=appuser:appuser . .
+COPY . .
 
-# Create necessary directories with proper permissions
-RUN mkdir -p /app/logs && chown -R appuser:appuser /app
+# Create necessary directories
+RUN mkdir -p /app/logs && chmod -R 755 /app
 
-# Switch to non-root user
-USER appuser
+# Make startup script executable
+RUN chmod +x /app/startup.sh
 
-# Expose port
-EXPOSE 8000
+# Expose Hugging Face default port
+EXPOSE 7860
 
-# Health check
+# Health check (updated for HF port)
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD curl -f http://localhost:8000/health || exit 1
+    CMD curl -f http://localhost:7860/health || exit 1
 
-# Run the application with uvicorn for production
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2"]
+# Run the application using startup script
+CMD ["/bin/bash", "/app/startup.sh"]
