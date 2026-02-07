@@ -39,7 +39,7 @@ class Settings(BaseSettings):
         default=False,
         description="Debug mode (set to false in production)"
     )
-    API_VERSION: str = "1.0.0"
+    API_VERSION: str = "1.0.1"
 
     # Server
     HOST: str = "0.0.0.0"
