@@ -1,4 +1,13 @@
-# Phase 2: Full-Stack Web App - Polish & Documentation
+---
+title: Todo App - Phase 3 Backend
+emoji: 🚀
+colorFrom: blue
+colorTo: green
+sdk: docker
+app_port: 7860
+---
+
+# Phase 3: Full-Stack Web Todo Application
 
 This directory contains the final touches for Phase 2 of the Todo Application CLI (Web Evolution).
 

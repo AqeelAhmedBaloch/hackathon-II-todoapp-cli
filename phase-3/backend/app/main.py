@@ -9,6 +9,8 @@ from app.core.config import settings
 from app.core.database import get_db
 from app.core.database_init import init_database
 from app.routers import auth, tasks
+from app.core.websockets import manager
+from fastapi import WebSocket, WebSocketDisconnect
 import logging
 
 # Initialize database tables
@@ -41,6 +43,17 @@ app.add_middleware(
 # Include routers
 app.include_router(auth.router)
 app.include_router(tasks.router)
+
+@app.websocket("/ws/{user_id}")
+async def websocket_endpoint(websocket: WebSocket, user_id: int):
+    await manager.connect(websocket, user_id)
+    try:
+        while True:
+            # We can receive messages if needed, but for now we mainly broadcast
+            data = await websocket.receive_text()
+            # client can send heartbeats or other messages
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, user_id)
 
 
 @app.get("/")
