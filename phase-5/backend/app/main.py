@@ -1,6 +1,6 @@
 """
 Main FastAPI application entry point.
-Phase-4: AI-Powered Task Management
+Phase-5: AI & Analytics Enterprise Edition
 """
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
@@ -8,7 +8,8 @@ from sqlalchemy.orm import Session
 from app.core.config import settings
 from app.core.database import get_db
 from app.core.database_init import init_database
-from app.routers import auth, tasks, ai
+from app.routers import auth, tasks, ai, workspaces, calendar
+from app.analytics import router as analytics
 from app.core.websockets import manager
 from fastapi import WebSocket, WebSocketDisconnect
 import logging
@@ -22,9 +23,9 @@ except Exception as e:
 
 # Initialize FastAPI app
 app = FastAPI(
-    title="Todo App - Phase 4 (AI Integrated)",
+    title="Todo App - Phase 5 (Enterprise)",
     version=settings.API_VERSION,
-    description="RESTful API with Gemini AI Integration",
+    description="Enterprise RESTful API with AI, Analytics & Calendar Integration",
     debug=settings.DEBUG
 )
 
@@ -44,6 +45,9 @@ app.add_middleware(
 app.include_router(auth.router)
 app.include_router(tasks.router)
 app.include_router(ai.router)
+app.include_router(analytics.router)
+app.include_router(workspaces.router)
+app.include_router(calendar.router)
 
 @app.websocket("/ws/{user_id}")
 async def websocket_endpoint(websocket: WebSocket, user_id: int):
@@ -91,6 +95,6 @@ if __name__ == "__main__":
     uvicorn.run(
         "app.main:app",
         host=settings.HOST,
-        port=8002,
+        port=8003,
         reload=settings.DEBUG
     )
