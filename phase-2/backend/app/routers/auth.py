@@ -18,41 +18,44 @@ router = APIRouter(prefix="/api/auth", tags=["Authentication"])
 def register(user_data: UserCreate, db: Session = Depends(get_db)):
     """
     Register a new user.
-
-    - **email**: Valid email address (must be unique)
-    - **password**: Minimum 6 characters
-    - **full_name**: User's full name
-
-    Returns JWT token and user information.
     """
-    # Check if user already exists (case-insensitive)
-    existing_user = db.query(User).filter(User.email.ilike(user_data.email)).first()
-    if existing_user:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Email already registered"
+    try:
+        # Check if user already exists (case-insensitive)
+        existing_user = db.query(User).filter(User.email.ilike(user_data.email)).first()
+        if existing_user:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Email already registered"
+            )
+
+        # Hash password and create user
+        hashed_password = hash_password(user_data.password)
+        new_user = User(
+            email=user_data.email,
+            full_name=user_data.full_name,
+            password_hash=hashed_password
         )
 
-    # Hash password and create user
-    hashed_password = hash_password(user_data.password)
-    new_user = User(
-        email=user_data.email,
-        full_name=user_data.full_name,
-        password_hash=hashed_password
-    )
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
 
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
+        # Create access token
+        access_token = create_access_token(data={"sub": str(new_user.id)})
 
-    # Create access token
-    access_token = create_access_token(data={"sub": str(new_user.id)})
-
-    return Token(
-        access_token=access_token,
-        token_type="bearer",
-        user=UserResponse.from_orm(new_user)
-    )
+        return Token(
+            access_token=access_token,
+            token_type="bearer",
+            user=UserResponse.from_orm(new_user)
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"REGISTRATION ERROR for {user_data.email}: {str(e)}", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Database error during registration: {str(e)}"
+        )
 
 
 @router.post("/login", response_model=Token)

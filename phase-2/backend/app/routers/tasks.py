@@ -72,15 +72,15 @@ def create_task(
 ):
     """
     Create a new task.
-
-    - **title**: Task title (required, max 255 characters)
-    - **description**: Task description (optional)
-
-    Returns the created task.
     """
     new_task = Task(
         title=task_data.title,
         description=task_data.description,
+        priority=task_data.priority or "medium",
+        category=task_data.category,
+        due_date=task_data.due_date,
+        workspace_id=task_data.workspace_id,
+        parent_id=task_data.parent_id,
         owner_id=current_user.id,
         completed=False
     )
@@ -101,13 +101,6 @@ def update_task(
 ):
     """
     Update an existing task.
-
-    - **task_id**: Task ID
-    - **title**: New title (optional)
-    - **description**: New description (optional)
-    - **completed**: New completion status (optional)
-
-    Returns the updated task.
     """
     task = db.query(Task).filter(
         Task.id == task_id,
@@ -121,12 +114,9 @@ def update_task(
         )
 
     # Update fields if provided
-    if task_data.title is not None:
-        task.title = task_data.title
-    if task_data.description is not None:
-        task.description = task_data.description
-    if task_data.completed is not None:
-        task.completed = task_data.completed
+    update_data = task_data.model_dump(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(task, key, value)
 
     db.commit()
     db.refresh(task)

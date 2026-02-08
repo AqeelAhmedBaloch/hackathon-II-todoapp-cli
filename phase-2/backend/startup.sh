@@ -29,10 +29,11 @@ if [ -z "$JWT_SECRET_KEY" ]; then
 fi
 
 echo ""
-echo "===== Initializing Database ====="
-# Initialize database tables
-python -c "from app.core.database_init import init_database; init_database()" || {
-    echo "WARNING: Database initialization failed, but continuing..."
+echo "===== Initializing & Migrating Database ====="
+# Initialize database tables and add missing columns
+python migrate_db.py || {
+    echo "WARNING: Database migration failed, falling back to basic initialization..."
+    python -c "from app.core.database_init import init_database; init_database()"
 }
 
 echo ""
