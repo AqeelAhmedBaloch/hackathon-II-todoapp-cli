@@ -37,7 +37,8 @@ export interface Task {
   category?: string;
   due_date?: string;
   owner_id: number;
-  parent_id?: number;
+  workspace_id?: number | null;
+  parent_id?: number | null;
   created_at: string;
   updated_at: string | null;
   subtasks: Task[];
@@ -49,7 +50,8 @@ export interface TaskCreate {
   priority?: 'low' | 'medium' | 'high';
   category?: string;
   due_date?: string;
-  parent_id?: number;
+  workspace_id?: number | null;
+  parent_id?: number | null;
 }
 
 export interface TaskUpdate {

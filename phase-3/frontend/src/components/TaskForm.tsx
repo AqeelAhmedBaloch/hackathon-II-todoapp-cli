@@ -1,6 +1,7 @@
 import { useState, FormEvent, ChangeEvent } from 'react';
 import { tasksAPI } from '../services/api';
 import { TaskCreate } from '../types';
+import { Layout, Calendar, AlertCircle } from 'lucide-react';
 
 interface TaskFormProps {
   onSuccess: () => void;
@@ -31,14 +32,17 @@ export default function TaskForm({ onSuccess, onCancel, parentId }: TaskFormProp
 
     try {
       setLoading(true);
-      await tasksAPI.createTask(formData);
-      setFormData({
-        title: '',
-        description: '',
-        priority: 'medium',
-        category: '',
-        due_date: ''
-      });
+      // Clean data: convert empty strings to undefined for optional fields
+      const dataToSend = {
+        title: formData.title,
+        description: formData.description || undefined,
+        priority: formData.priority || 'medium',
+        category: formData.category || undefined,
+        due_date: formData.due_date || undefined,
+        workspace_id: formData.workspace_id || undefined,
+        parent_id: formData.parent_id || undefined,
+      };
+      await tasksAPI.createTask(dataToSend);
       onSuccess();
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Failed to create task');
@@ -47,119 +51,109 @@ export default function TaskForm({ onSuccess, onCancel, parentId }: TaskFormProp
     }
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Create New Task</h3>
-
-      {error && (
-        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
-          <p className="text-sm text-red-800">{error}</p>
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-4">
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
-              Title <span className="text-red-500">*</span>
-            </label>
+            <label className="block text-xs font-semibold text-cyan-500/80 mb-1 uppercase tracking-wider">Task Title</label>
             <input
-              id="title"
               name="title"
               type="text"
               value={formData.title}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              placeholder="Enter task title"
+              className="w-full px-4 py-3 bg-slate-950/50 border border-white/10 rounded-lg focus:ring-1 focus:ring-cyan-500 text-slate-200 placeholder-slate-600 font-sans"
+              placeholder="What's on your mind?"
               required
             />
           </div>
 
           <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
-              Description
-            </label>
+            <label className="block text-xs font-semibold text-cyan-500/80 mb-1 uppercase tracking-wider">Description</label>
             <textarea
-              id="description"
               name="description"
               value={formData.description}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              placeholder="Enter task description (optional)"
-              rows={2}
+              className="w-full px-4 py-3 bg-slate-950/50 border border-white/10 rounded-lg focus:ring-1 focus:ring-cyan-500 text-slate-200 placeholder-slate-600 h-32 font-sans"
+              placeholder="Add details for this task..."
             />
           </div>
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor="priority" className="block text-sm font-medium text-gray-700 mb-1">
-                Priority
-              </label>
+              <label className="block text-xs font-semibold text-cyan-500/80 mb-1 uppercase tracking-wider">Priority</label>
               <select
-                id="priority"
                 name="priority"
                 value={formData.priority}
-                onChange={handleChange as any}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                onChange={handleChange}
+                className="w-full px-4 py-3 bg-slate-950/50 border border-white/10 rounded-lg focus:ring-1 focus:ring-cyan-500 text-slate-200 font-sans"
               >
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
+                <option value="low" className="bg-slate-900">Low</option>
+                <option value="medium" className="bg-slate-900">Medium</option>
+                <option value="high" className="bg-slate-900">High</option>
               </select>
             </div>
-
             <div>
-              <label htmlFor="due_date" className="block text-sm font-medium text-gray-700 mb-1">
-                Due Date
-              </label>
-              <input
-                id="due_date"
-                name="due_date"
-                type="datetime-local"
-                value={formData.due_date}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              />
+              <label className="block text-xs font-semibold text-cyan-500/80 mb-1 uppercase tracking-wider">Due Date</label>
+              <div className="relative">
+                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                <input
+                  name="due_date"
+                  type="datetime-local"
+                  value={formData.due_date || ''}
+                  onChange={handleChange}
+                  className="w-full pl-10 pr-4 py-3 bg-slate-950/50 border border-white/10 rounded-lg focus:ring-1 focus:ring-cyan-500 text-slate-200 font-sans"
+                />
+              </div>
             </div>
           </div>
 
           <div>
-            <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
-              Category
-            </label>
-            <input
-              id="category"
-              name="category"
-              type="text"
-              value={formData.category}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              placeholder="e.g. Work, Personal, Shopping"
-            />
+            <label className="block text-xs font-semibold text-cyan-500/80 mb-1 uppercase tracking-wider">Category</label>
+            <div className="relative">
+              <Layout className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+              <input
+                name="category"
+                type="text"
+                value={formData.category}
+                onChange={handleChange}
+                className="w-full pl-10 pr-4 py-3 bg-slate-950/50 border border-white/10 rounded-lg focus:ring-1 focus:ring-cyan-500 text-slate-200 placeholder-slate-600 font-sans"
+                placeholder="Work, Life, Code..."
+              />
+            </div>
           </div>
 
-          <div className="flex space-x-2">
-            <button
-              type="submit"
-              disabled={loading}
-              className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:bg-indigo-400"
-            >
-              {loading ? 'Creating...' : 'Create Task'}
-            </button>
+          <div className="pt-4 flex items-end justify-end space-x-3">
             <button
               type="button"
               onClick={onCancel}
-              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
+              className="px-6 py-3 text-slate-400 hover:text-white transition-colors font-medium"
             >
               Cancel
             </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="px-8 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-lg font-bold shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 transform hover:-translate-y-0.5 transition-all disabled:opacity-50"
+            >
+              {loading ? 'Syncing...' : 'Create Task'}
+            </button>
           </div>
         </div>
-      </form>
-    </div>
+      </div>
+
+      {error && (
+        <div className="flex items-center space-x-2 text-red-400 text-sm bg-red-950/20 p-3 rounded-lg border border-red-500/20 animate-shake">
+          <AlertCircle className="w-4 h-4" />
+          <span>{error}</span>
+        </div>
+      )}
+    </form>
   );
 }

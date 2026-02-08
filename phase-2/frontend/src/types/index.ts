@@ -33,7 +33,12 @@ export interface Task {
   title: string;
   description: string | null;
   completed: boolean;
+  priority?: 'low' | 'medium' | 'high';
+  category?: string;
+  due_date?: string;
   owner_id: number;
+  workspace_id?: number | null;
+  parent_id?: number;
   created_at: string;
   updated_at: string | null;
 }
@@ -41,6 +46,11 @@ export interface Task {
 export interface TaskCreate {
   title: string;
   description?: string;
+  priority?: 'low' | 'medium' | 'high';
+  category?: string;
+  due_date?: string;
+  workspace_id?: number | string | null;
+  parent_id?: number;
 }
 
 export interface TaskUpdate {

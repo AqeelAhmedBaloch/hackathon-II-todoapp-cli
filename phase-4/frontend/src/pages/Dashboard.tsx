@@ -51,12 +51,18 @@ export default function Dashboard() {
     fetchTasks();
   };
 
-  const handleTaskUpdated = () => {
-    fetchTasks();
+  const handleTaskUpdated = async (task: Task) => {
+    try {
+      await tasksAPI.toggleTask(task.id);
+      fetchTasks();
+    } catch (error) {
+      console.error('Failed to update task:', error);
+    }
   };
 
-  const handleTaskDeleted = () => {
-    fetchTasks();
+  const handleTaskDeleted = (id: number) => {
+    setTasks(tasks.filter(t => t.id !== id));
+    tasksAPI.deleteTask(id).catch(fetchTasks);
   };
 
   const stats = {

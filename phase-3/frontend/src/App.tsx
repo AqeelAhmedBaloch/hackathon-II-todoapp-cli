@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import PrivateRoute from './components/PrivateRoute';
+import GlassSidebar from './components/GlassSidebar';
 
 function App() {
   return (
@@ -13,7 +14,12 @@ function App() {
           path="/"
           element={
             <PrivateRoute>
-              <Dashboard />
+              <div className="flex min-h-screen bg-slate-950">
+                <GlassSidebar />
+                <main className="flex-1 md:ml-64 relative">
+                  <Dashboard />
+                </main>
+              </div>
             </PrivateRoute>
           }
         />

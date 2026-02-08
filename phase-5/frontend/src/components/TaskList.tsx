@@ -3,8 +3,8 @@ import TaskItem from './TaskItem';
 
 interface TaskListProps {
   tasks: Task[];
-  onTaskUpdated: () => void;
-  onTaskDeleted: () => void;
+  onTaskUpdated: (task: Task) => void;
+  onTaskDeleted: (id: number) => void;
 }
 
 export default function TaskList({ tasks, onTaskUpdated, onTaskDeleted }: TaskListProps) {
@@ -14,8 +14,8 @@ export default function TaskList({ tasks, onTaskUpdated, onTaskDeleted }: TaskLi
         <TaskItem
           key={task.id}
           task={task}
-          onTaskUpdated={onTaskUpdated}
-          onTaskDeleted={onTaskDeleted}
+          onTaskUpdated={() => onTaskUpdated(task)}
+          onTaskDeleted={() => onTaskDeleted(task.id)}
         />
       ))}
     </div>

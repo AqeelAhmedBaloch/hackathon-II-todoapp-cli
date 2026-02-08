@@ -1,38 +1,20 @@
 import { Task } from '../types';
 import GlassTaskCard from './GlassTaskCard';
-import { tasksAPI } from '../services/api';
 
 interface TaskListProps {
   tasks: Task[];
-  onTaskUpdated: () => void;
-  onTaskDeleted: () => void;
+  onTaskUpdated: (task: Task) => void;
+  onTaskDeleted: (id: number) => void;
 }
 
 export default function TaskList({ tasks, onTaskUpdated, onTaskDeleted }: TaskListProps) {
 
-  const handleUpdate = async (updatedTask: Task) => {
-    try {
-      await tasksAPI.updateTask(updatedTask.id, {
-        title: updatedTask.title,
-        description: updatedTask.description || undefined,
-        completed: updatedTask.completed, // Toggle completion
-        priority: updatedTask.priority,
-        category: updatedTask.category,
-        due_date: updatedTask.due_date
-      });
-      onTaskUpdated();
-    } catch (error) {
-      console.error("Failed to update task", error);
-    }
+  const handleUpdate = (updatedTask: Task) => {
+    onTaskUpdated(updatedTask);
   };
 
-  const handleDelete = async (id: number) => {
-    try {
-      await tasksAPI.deleteTask(id);
-      onTaskDeleted();
-    } catch (error) {
-      console.error("Failed to delete task", error);
-    }
+  const handleDelete = (id: number) => {
+    onTaskDeleted(id);
   };
 
   return (

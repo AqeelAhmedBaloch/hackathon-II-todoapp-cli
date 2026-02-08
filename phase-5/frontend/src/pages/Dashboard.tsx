@@ -52,12 +52,13 @@ export default function Dashboard() {
     fetchTasks();
   };
 
-  const handleTaskUpdated = () => {
+  const handleTaskUpdated = (task: Task) => {
     fetchTasks();
   };
 
-  const handleTaskDeleted = () => {
-    fetchTasks();
+  const handleTaskDeleted = (id: number) => {
+    setTasks(tasks.filter(t => t.id !== id));
+    tasksAPI.deleteTask(id).catch(fetchTasks);
   };
 
   const stats = {

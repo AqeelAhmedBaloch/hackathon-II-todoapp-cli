@@ -3,7 +3,7 @@ Database initialization utilities for proper table creation.
 """
 from sqlalchemy import text
 from app.core.database import engine, Base
-from app.models import user, task  # Import all models to register them with Base
+from app.models import user, task, workspace  # Import all models to register them with Base
 import logging
 
 logger = logging.getLogger(__name__)

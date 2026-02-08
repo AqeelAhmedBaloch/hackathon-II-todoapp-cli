@@ -20,12 +20,15 @@ class Task(Base):
     category = Column(String(50), nullable=True)
     due_date = Column(DateTime(timezone=True), nullable=True)
     owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    workspace_id = Column(Integer, ForeignKey("workspaces.id"), nullable=True) # tasks can be personal (null) or workspace-based
     parent_id = Column(Integer, ForeignKey("tasks.id"), nullable=True)  # For subtasks
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationship to user
     owner = relationship("User", back_populates="tasks")
+    # Relationship to workspace
+    workspace = relationship("Workspace", backref="tasks")
     # Self-referential relationship for subtasks
     subtasks = relationship("Task", backref="parent", remote_side=[id])
 
