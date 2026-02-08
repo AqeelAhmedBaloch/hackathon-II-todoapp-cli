@@ -62,7 +62,7 @@ export default function Dashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Todo App</h1>
+              <h1 className="text-3xl font-bold text-gray-900">Hackathon-II-Phase-2</h1>
               <p className="text-sm text-gray-500">Welcome, {user?.full_name}</p>
             </div>
             <button
@@ -98,31 +98,28 @@ export default function Dashboard() {
           <div className="flex space-x-2">
             <button
               onClick={() => setFilter('all')}
-              className={`px-4 py-2 rounded-md ${
-                filter === 'all'
+              className={`px-4 py-2 rounded-md ${filter === 'all'
                   ? 'bg-indigo-600 text-white'
                   : 'bg-white text-gray-700 hover:bg-gray-50'
-              }`}
+                }`}
             >
               All
             </button>
             <button
               onClick={() => setFilter('pending')}
-              className={`px-4 py-2 rounded-md ${
-                filter === 'pending'
+              className={`px-4 py-2 rounded-md ${filter === 'pending'
                   ? 'bg-indigo-600 text-white'
                   : 'bg-white text-gray-700 hover:bg-gray-50'
-              }`}
+                }`}
             >
               Pending
             </button>
             <button
               onClick={() => setFilter('completed')}
-              className={`px-4 py-2 rounded-md ${
-                filter === 'completed'
+              className={`px-4 py-2 rounded-md ${filter === 'completed'
                   ? 'bg-indigo-600 text-white'
                   : 'bg-white text-gray-700 hover:bg-gray-50'
-              }`}
+                }`}
             >
               Completed
             </button>

@@ -38,12 +38,12 @@ class Settings(BaseSettings):
     )
 
     # Application
-    APP_NAME: str = "Todo App API - Phase 2"
+    APP_NAME: str = "Hackathon-II-Phase-4 API"
     DEBUG: bool = Field(
         default=False,
         description="Debug mode (set to false in production)"
     )
-    API_VERSION: str = "1.0.1"
+    API_VERSION: str = "4.0.0"
 
     # Server
     HOST: str = "0.0.0.0"
