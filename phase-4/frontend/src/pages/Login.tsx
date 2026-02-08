@@ -35,44 +35,47 @@ export default function Login() {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    // Clear error when user starts typing after an error
-    if (error) {
-      setError('');
-    }
+    if (error) setError('');
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4" style={{ background: 'rgba(0, 128, 0, 0.3)' }}>
-      <div className="w-full max-w-sm">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-slate-950">
+      {/* Background Effects */}
+      <div className="absolute top-0 left-0 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl -translate-y-1/2 -translate-x-1/2 animate-blob"></div>
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl translate-y-1/2 translate-x-1/2 animate-blob animation-delay-2000"></div>
+
+      <div className="w-full max-w-md relative z-10 p-1">
+        <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 rounded-2xl blur-xl opacity-50"></div>
+        <div className="glass-panel rounded-xl shadow-2xl p-8 border border-white/10 relative">
           <div className="text-center mb-8">
-            <div className="mx-auto w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mb-4">
-              <Lock className="w-6 h-6 text-white" />
+            <div className="mx-auto w-14 h-14 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center mb-4 shadow-lg shadow-cyan-500/20">
+              <Lock className="w-7 h-7 text-white" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900">Welcome ToDo App</h2>
-            <p className="text-gray-600 mt-2">Sign in to your account</p>
+            <h2 className="text-3xl font-bold text-white tracking-tight">Welcome Back</h2>
+            <p className="text-slate-400 mt-2">Sign in to your Phase 4 Workspace</p>
           </div>
 
           <form className="space-y-6" onSubmit={handleSubmit}>
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded text-sm">
+              <div className="bg-red-500/10 border border-red-500/20 text-red-200 px-4 py-3 rounded-lg text-sm flex items-center">
+                <svg className="w-4 h-4 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" /></svg>
                 {error}
               </div>
             )}
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-1.5">
                 Email address
               </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <div className="relative group">
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500 group-focus-within:text-cyan-400 transition-colors w-5 h-5" />
                 <input
                   id="email"
                   name="email"
                   type="email"
                   required
                   autoComplete="email"
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
+                  className="w-full pl-10 pr-4 py-3 bg-slate-900/50 border border-white/10 rounded-lg focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 text-slate-200 placeholder-slate-600 transition-all outline-none"
                   placeholder="Enter your email"
                   value={formData.email}
                   onChange={handleChange}
@@ -81,18 +84,18 @@ export default function Login() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="password" className="block text-sm font-medium text-slate-300 mb-1.5">
                 Password
               </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <div className="relative group">
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500 group-focus-within:text-cyan-400 transition-colors w-5 h-5" />
                 <input
                   id="password"
                   name="password"
                   type={showPassword ? "text" : "password"}
                   required
                   autoComplete="current-password"
-                  className="w-full pl-10 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
+                  className="w-full pl-10 pr-12 py-3 bg-slate-900/50 border border-white/10 rounded-lg focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 text-slate-200 placeholder-slate-600 transition-all outline-none"
                   placeholder="Enter your password"
                   value={formData.password}
                   onChange={handleChange}
@@ -100,31 +103,32 @@ export default function Login() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors p-1"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
-
-            </div>
-
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 text-white py-3 px-4 rounded-lg font-bold hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
-              {loading ? 'Signing in...' : 'Sign in'}
+              {loading ? (
+                <div className="flex items-center justify-center">
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
+                  Signing in...
+                </div>
+              ) : 'Sign In'}
             </button>
           </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
+          <div className="mt-8 text-center">
+            <p className="text-sm text-slate-500">
               Don't have an account?{' '}
-              <Link to="/register" className="font-medium text-blue-600 hover:text-blue-500">
-                Sign up
+              <Link to="/register" className="font-medium text-cyan-400 hover:text-cyan-300 transition-colors">
+                Sign up now
               </Link>
             </p>
           </div>
