@@ -19,7 +19,11 @@ def migrate_db():
     if db_url.startswith("postgres://"):
         db_url = db_url.replace("postgres://", "postgresql://", 1)
 
-    engine = create_engine(db_url)
+    # Adding connect_timeout to prevent hanging during slow cold starts (like Neon)
+    engine = create_engine(
+        db_url,
+        connect_args={"connect_timeout": 10} if "postgresql" in db_url else {}
+    )
     
     columns_to_add = [
         ("priority", "VARCHAR(20) DEFAULT 'medium'"),

@@ -12,6 +12,8 @@ echo ""
 # Print environment info (without sensitive data)
 echo "Python version: $(python --version)"
 echo "Working directory: $(pwd)"
+echo "Memory Limit Check (if available):"
+free -m || echo "free command not available"
 echo ""
 
 # Check if DATABASE_URL is set

@@ -25,7 +25,8 @@ else:
     engine = create_engine(
         db_url,
         pool_pre_ping=True,  # Verify connections before using
-        echo=settings.DEBUG  # Log SQL queries in debug mode
+        echo=settings.DEBUG, # Log SQL queries in debug mode
+        connect_args={"connect_timeout": 10} if "postgresql" in db_url else {}
     )
 
 # Create session factory
