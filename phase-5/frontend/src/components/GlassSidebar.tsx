@@ -1,7 +1,6 @@
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { LayoutDashboard, BarChart2, Calendar, Settings, LogOut } from 'lucide-react';
+import { LayoutDashboard, BarChart2, Calendar, LogOut } from 'lucide-react';
 import { clearAuthData } from '../utils/auth';
 import { useNavigate } from 'react-router-dom';
 

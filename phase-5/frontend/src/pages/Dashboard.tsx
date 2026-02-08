@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { tasksAPI } from '../services/api';
-import { clearAuthData, getAuthData } from '../utils/auth';
+import { getAuthData } from '../utils/auth';
 import { Task, TaskFilter } from '../types';
 // import TaskList from '../components/TaskList';
 import TaskForm from '../components/TaskForm';
@@ -18,7 +17,6 @@ export default function Dashboard() {
   const [filter, setFilter] = useState<TaskFilter>('all');
   const [showForm, setShowForm] = useState<boolean>(false);
   const [notificationMessages, setNotificationMessages] = useState<any[]>([]);
-  const navigate = useNavigate();
   const { user } = getAuthData();
 
   useEffect(() => {
@@ -47,11 +45,6 @@ export default function Dashboard() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleLogout = () => {
-    clearAuthData();
-    navigate('/login');
   };
 
   const handleTaskCreated = () => {
