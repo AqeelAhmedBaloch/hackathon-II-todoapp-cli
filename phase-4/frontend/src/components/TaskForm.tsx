@@ -59,7 +59,7 @@ export default function TaskForm({ onSuccess, onCancel, parentId }: TaskFormProp
       setError('');
       const response = await aiAPI.suggest(formData.title);
       const { category, priority } = response.data;
-      setFormData(prev => ({
+      setFormData((prev: TaskCreate) => ({
         ...prev,
         category: category || prev.category,
         priority: (priority?.toLowerCase() as any) || prev.priority
