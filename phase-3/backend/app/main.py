@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from app.core.config import settings
 from app.core.database import get_db
 from app.core.database_init import init_database
-from app.routers import auth, tasks, workspaces
+from app.routers import auth, tasks, workspaces, chat
 from app.core.websockets import manager
 from fastapi import WebSocket, WebSocketDisconnect
 import logging
@@ -44,6 +44,7 @@ app.add_middleware(
 app.include_router(auth.router)
 app.include_router(tasks.router)
 app.include_router(workspaces.router)
+app.include_router(chat.router)
 
 @app.websocket("/ws/{user_id}")
 async def websocket_endpoint(websocket: WebSocket, user_id: int):

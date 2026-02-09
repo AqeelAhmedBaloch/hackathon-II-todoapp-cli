@@ -6,13 +6,16 @@ import TaskForm from '../components/TaskForm';
 import { useWebSocket } from '../hooks/useWebSocket';
 import NotificationBell from '../components/NotificationBell';
 import GlassTaskCard from '../components/GlassTaskCard';
+import ChatBot from '../components/ChatBot';
 import { AnimatePresence, motion } from 'framer-motion';
+import { MessageCircle } from 'lucide-react';
 
 export default function Dashboard() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [filter, setFilter] = useState<TaskFilter>('all');
   const [showForm, setShowForm] = useState<boolean>(false);
+  const [showChat, setShowChat] = useState<boolean>(false);
   const [notificationMessages, setNotificationMessages] = useState<any[]>([]);
   const { user } = getAuthData();
 
@@ -82,7 +85,7 @@ export default function Dashboard() {
         <header className="flex justify-between items-center mb-8">
           <div>
             <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-violet-500 font-sans">
-              Phase 3 Sync
+              Dashboard Phase 3
             </h2>
             <p className="text-sm text-slate-500">Real-time updates active for {user?.full_name}</p>
           </div>
@@ -201,6 +204,19 @@ export default function Dashboard() {
           </motion.div>
         )}
       </div>
+
+      {/* Floating Chat Button */}
+      {!showChat && (
+        <button
+          onClick={() => setShowChat(true)}
+          className="fixed bottom-4 right-4 w-14 h-14 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center z-40"
+        >
+          <MessageCircle className="w-6 h-6" />
+        </button>
+      )}
+
+      {/* ChatBot */}
+      {showChat && <ChatBot onClose={() => setShowChat(false)} />}
     </div>
   );
 }

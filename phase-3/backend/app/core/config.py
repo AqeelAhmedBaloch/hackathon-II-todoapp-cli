@@ -27,6 +27,12 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_HOURS: int = 24
 
+    # Gemini AI
+    GEMINI_API_KEY: str = Field(
+        default="",
+        description="Google Gemini API key for AI chatbot"
+    )
+
     # CORS
     CORS_ORIGINS: str = Field(
         default="*",
