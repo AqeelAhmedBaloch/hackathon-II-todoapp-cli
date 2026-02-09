@@ -49,9 +49,13 @@ const ChatBot: React.FC<ChatBotProps> = ({ onClose }) => {
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error: any) {
       console.error('Chat error:', error);
+      console.error('API URL:', import.meta.env.VITE_API_URL || 'http://localhost:8000');
+      console.error('Error response:', error.response?.data);
+      console.error('Error status:', error.response?.status);
+
       const errorMessage: Message = {
         role: 'assistant',
-        content: 'Sorry, I encountered an error. Please try again.'
+        content: error.response?.data?.detail || 'Sorry, I encountered an error. Please try again.'
       };
       setMessages(prev => [...prev, errorMessage]);
     } finally {
@@ -95,11 +99,10 @@ const ChatBot: React.FC<ChatBotProps> = ({ onClose }) => {
               </div>
             )}
             <div
-              className={`max-w-[80%] p-3 rounded-2xl ${
-                message.role === 'user'
+              className={`max-w-[80%] p-3 rounded-2xl ${message.role === 'user'
                   ? 'bg-gradient-to-br from-purple-600 to-blue-600 text-white'
                   : 'bg-white/10 text-white border border-white/10'
-              }`}
+                }`}
             >
               <p className="text-sm whitespace-pre-wrap">{message.content}</p>
             </div>
