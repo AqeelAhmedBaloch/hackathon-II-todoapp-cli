@@ -52,7 +52,7 @@ export default function Dashboard() {
     fetchTasks();
   };
 
-  const handleTaskUpdated = (task: Task) => {
+  const handleTaskUpdated = () => {
     fetchTasks();
   };
 
